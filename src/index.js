@@ -39,29 +39,29 @@ function onSearchPicture(event) {
 function createCards(data) {
   return data
     .map(({ likes, tags, views, downloads, comments, webformatURL, largeImageURL }) => {
-      return `<li class="photo-card">
+      return `<div class="photo-card">
       <a class="gallery__item" href="${largeImageURL}">
   <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-  <a/>
+  </a>
   <div class="info">
-    <p class="info-item">
+    <div class="info-item">
       <b>Likes</b>
-      ${likes}
-    </p>
-    <p class="info-item">
+      <span>${likes}</span>
+    </div>
+    <div class="info-item">
       <b>Views</b>
-      ${views}
-    </p>
-    <p class="info-item">
+      <span>${views}</span>
+    </div>
+    <div class="info-item">
       <b>Comments</b>
-      ${comments}
-    </p>
-    <p class="info-item">
+      <span>${comments}</span>
+    </div>
+    <div class="info-item">
       <b>Downloads</b>
-      ${downloads}
-    </p>
+      <span>${downloads}</span>
+    </div>
+    </div>
   </div>
-</li>
     `;
     })
     .join('');
