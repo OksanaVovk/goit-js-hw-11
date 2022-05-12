@@ -2,37 +2,36 @@ import './sass/main.scss';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import NewsApiServise from './NewsApiServise';
 
-const KEY_PIXABAY = `27331775-d4865903e456a7e108fc4ea1d`;
-const axios = require('axios').default;
-
-async function getCarts(name) {
-  const optionsSearch = `&q=${name}&image_type=photo&orientation=horizontal&safesearch=true`;
-  const url = `https://pixabay.com/api/?key=${KEY_PIXABAY}${optionsSearch}`;
-  console.log(url);
-  try {
-    const response = await axios.get(url);
-    console.log(response);
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
-}
+const newsApiServise = new NewsApiServise();
+const lightbox = new SimpleLightbox('.gallery a', {});
 
 const formEl = document.querySelector('.search-form');
 const galleryEl = document.querySelector('.gallery');
+const loadmoreBtn = document.querySelector('.load-more');
+
 formEl.addEventListener('submit', onSearchPicture);
+loadmoreBtn.addEventListener('click', onLoadMoreBtn);
+
 function onSearchPicture(event) {
   event.preventDefault();
   clearGallery();
-  const searchQuery = event.currentTarget.elements.searchQuery.value.trim();
-  console.log(searchQuery);
-  getCarts(searchQuery).then(response => {
+  newsApiServise.query = event.currentTarget.elements.searchQuery.value.trim();
+  console.log(newsApiServise.searchQuery);
+  newsApiServise.resetPage();
+  newsApiServise.getCarts().then(response => {
     const picturesArray = response.data.hits;
     console.log(picturesArray);
+    if (picturesArray.length === 0) {
+      return Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.',
+      );
+    }
+    const totalCards = response.data.totalHits;
+    Notiflix.Notify.success(`Hooray! We found ${totalCards} images.`);
     const markup_cards = createCards(picturesArray);
     galleryEl.insertAdjacentHTML('beforeend', markup_cards);
-    const lightbox = new SimpleLightbox('.gallery a', {});
   });
 }
 
@@ -71,20 +70,20 @@ function clearGallery() {
   galleryEl.innerHTML = '';
 }
 
-// function fetchCountries(name) {
-//   const optionsSearch = `&q=${name}&image_type=photo&orientation=horizontal&safesearch=true`;
-//   const url = `https://pixabay.com/api/?key=${KEY_PIXABAY}${optionsSearch}`;
-//   return fetch(url).then(response => {
-//     if (!response.ok) {
-//       throw new Error(response.status);
-//     }
-//     return response.json();
-//   });
-// }
-// fetchCountries('cat')
-//   .then(data => {
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     console.log(error);
-//   });
+function onLoadMoreBtn() {
+  newsApiServise.getCarts().then(response => {
+    const picturesMoreArray = response.data.hits;
+    console.log(picturesMoreArray);
+    const markupMore_cards = createCards(picturesMoreArray);
+    galleryEl.insertAdjacentHTML('beforeend', markupMore_cards);
+    lightbox.refresh();
+    const cardsEl = document.querySelectorAll('.photo-card');
+    const totalCards = response.data.totalHits;
+    // console.dir(cardsEl);
+    if (cardsEl.length >= totalCards) {
+      return Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.',
+      );
+    }
+  });
+}
