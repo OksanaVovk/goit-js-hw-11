@@ -2,6 +2,8 @@ export default class NewsApiServise {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
+    this.isLoading = false;
+    this.shouldLoad = true;
   }
   async getCarts() {
     const axios = require('axios').default;
@@ -13,7 +15,6 @@ export default class NewsApiServise {
     try {
       const response = await axios.get(url);
       console.log(response);
-      this.incrementPage();
       return response;
     } catch (error) {
       console.error(error);
@@ -34,5 +35,13 @@ export default class NewsApiServise {
 
   incrementPage() {
     this.page += 1;
+  }
+
+  resetIsLoading() {
+    this.isLoading = false;
+  }
+
+  reswrtShouldLoad() {
+    this.shouldLoad = true;
   }
 }
