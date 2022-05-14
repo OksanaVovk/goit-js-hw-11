@@ -84,7 +84,7 @@ button{
 }
 }
 
-input{
+.form_input{
   height: 40px;
   margin-right: 10px;
 }
@@ -128,11 +128,13 @@ input{
   display: block;
  margin-left: auto;
  margin-right: auto;
+ 
 }
 
 .choose{
  padding: 0;
  margin: 0;
+ margin-bottom: 10px;
 }
 
 .is-hidden{
