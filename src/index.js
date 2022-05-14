@@ -11,10 +11,32 @@ const lightbox = new SimpleLightbox('.gallery a', {});
 const formEl = document.querySelector('.search-form');
 const galleryEl = document.querySelector('.gallery');
 const loadmoreBtn = document.querySelector('.load-more');
+const scrollBtn = document.querySelector('.scroll');
+const forButtonBtn = document.querySelector('.button');
 
 formEl.addEventListener('submit', onSearchPicture);
+forButtonBtn.addEventListener('click', onForButton);
+scrollBtn.addEventListener('click', onScrollBtn);
 loadmoreBtn.addEventListener('click', onLoadMore);
+forButtonBtn.classList.add('current');
 loadmoreBtn.classList.add('visually-hidden');
+
+function onScrollBtn() {
+  forButtonBtn.classList.remove('current');
+  scrollBtn.classList.add('current');
+  window.addEventListener('scroll', throttle(checkPosition, 250));
+  window.addEventListener('resize', throttle(checkPosition, 250));
+  loadmoreBtn.classList.add('is-hidden');
+}
+
+function onForButton() {
+  forButtonBtn.classList.add('current');
+  loadmoreBtn.classList.remove('is-hidden');
+  scrollBtn.classList.remove('current');
+  loadmoreBtn.addEventListener('click', onLoadMore);
+  window.removeEventListener('scroll', throttle(checkPosition, 250));
+  window.removeEventListener('resize', throttle(checkPosition, 250));
+}
 
 function onSearchPicture(event) {
   event.preventDefault();
@@ -117,6 +139,3 @@ function checkPosition() {
     onLoadMore();
   }
 }
-
-// window.addEventListener('scroll', throttle(checkPosition, 250));
-// window.addEventListener('resize', throttle(checkPosition, 250));
