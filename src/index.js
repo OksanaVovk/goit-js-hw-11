@@ -121,10 +121,12 @@ function onLoadMore() {
     if (cardsEl.length >= totalCards) {
       newsApiServise.shouldLoad = false;
       loadmoreBtn.classList.add('visually-hidden');
-      return Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.',
-        { timeout: 3000 },
-      );
+      setTimeout(function () {
+        return Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.',
+          { timeout: 3000 },
+        );
+      }, 1000);
     }
   });
 }
