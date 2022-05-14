@@ -9,30 +9,31 @@ const newsApiServise = new NewsApiServise();
 const lightbox = new SimpleLightbox('.gallery a', {});
 
 const formEl = document.querySelector('.search-form');
+const inputEl = document.querySelector('input');
 const galleryEl = document.querySelector('.gallery');
 const loadmoreBtn = document.querySelector('.load-more');
-const scrollBtn = document.querySelector('.scroll');
+const forScrollBtn = document.querySelector('.scroll');
 const forButtonBtn = document.querySelector('.button');
 
 formEl.addEventListener('submit', onSearchPicture);
+
 forButtonBtn.addEventListener('click', onForButton);
-scrollBtn.addEventListener('click', onScrollBtn);
+forScrollBtn.addEventListener('click', onForScrollBtn);
 loadmoreBtn.addEventListener('click', onLoadMore);
-forButtonBtn.classList.add('current');
 loadmoreBtn.classList.add('visually-hidden');
 
-function onScrollBtn() {
-  forButtonBtn.classList.remove('current');
-  scrollBtn.classList.add('current');
+function onForScrollBtn() {
+  inputEl.value = '';
+  clearGallery();
+  loadmoreBtn.classList.add('is-hidden');
   window.addEventListener('scroll', throttle(checkPosition, 250));
   window.addEventListener('resize', throttle(checkPosition, 250));
-  loadmoreBtn.classList.add('is-hidden');
 }
 
 function onForButton() {
-  forButtonBtn.classList.add('current');
+  window.location.reload();
   loadmoreBtn.classList.remove('is-hidden');
-  scrollBtn.classList.remove('current');
+  loadmoreBtn.classList.add('visually-hidden');
   loadmoreBtn.addEventListener('click', onLoadMore);
   window.removeEventListener('scroll', throttle(checkPosition, 250));
   window.removeEventListener('resize', throttle(checkPosition, 250));
@@ -41,6 +42,7 @@ function onForButton() {
 function onSearchPicture(event) {
   event.preventDefault();
   clearGallery();
+  loadmoreBtn.classList.add('visually-hidden');
   newsApiServise.resetIsLoading();
   newsApiServise.reswrtShouldLoad();
   newsApiServise.query = event.currentTarget.elements.searchQuery.value.trim();
@@ -60,7 +62,9 @@ function onSearchPicture(event) {
     galleryEl.insertAdjacentHTML('beforeend', markup_cards);
     const cardsEl = document.querySelectorAll('.photo-card');
     if (cardsEl.length !== totalCards) {
-      loadmoreBtn.classList.toggle('visually-hidden');
+      loadmoreBtn.classList.remove('visually-hidden');
+    } else {
+      newsApiServise.shouldLoad = false;
     }
   });
 }
@@ -73,22 +77,22 @@ function createCards(data) {
   <img src="${webformatURL}" alt="${tags}" loading="lazy" />
   </a>
   <div class="info">
-    <div class="info-item">
+    <p class="info-item">
       <b>Likes</b>
       <span>${likes}</span>
-    </div>
-    <div class="info-item">
+    </p>
+    <p class="info-item">
       <b>Views</b>
       <span>${views}</span>
-    </div>
-    <div class="info-item">
+    </p>
+    <p class="info-item">
       <b>Comments</b>
       <span>${comments}</span>
-    </div>
-    <div class="info-item">
+    </p>
+    <p class="info-item">
       <b>Downloads</b>
       <span>${downloads}</span>
-    </div>
+    </p>
     </div>
   </div>
     `;
