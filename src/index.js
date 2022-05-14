@@ -61,6 +61,7 @@ function onSearchPicture(event) {
     const markup_cards = createCards(picturesArray);
     galleryEl.insertAdjacentHTML('beforeend', markup_cards);
     const cardsEl = document.querySelectorAll('.photo-card');
+    lightbox.refresh();
     if (cardsEl.length !== totalCards) {
       loadmoreBtn.classList.remove('visually-hidden');
     } else {
