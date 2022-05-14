@@ -124,7 +124,7 @@ function onLoadMore() {
       loadmoreBtn.classList.add('visually-hidden');
       setTimeout(function () {
         return Notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.',
+          "We're sorry, but you've reached the end of search results.",
           { timeout: 3000 },
         );
       }, 1000);
