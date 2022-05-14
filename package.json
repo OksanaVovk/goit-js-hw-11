@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "jquery": "^3.6.0",
     "lodash.throttle": "^4.1.1",
     "notiflix": "^3.2.5",
     "scroll-js": "^3.5.1",
