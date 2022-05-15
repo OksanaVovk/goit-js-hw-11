@@ -47,6 +47,9 @@ function onSearchPicture(event) {
   newsApiServise.reswrtShouldLoad();
   newsApiServise.query = event.currentTarget.elements.searchQuery.value.trim();
   console.log(newsApiServise.searchQuery);
+  if (newsApiServise.query === '') {
+    return Notiflix.Notify.info('Please enter search data.');
+  }
   newsApiServise.resetPage();
   newsApiServise.getCarts().then(response => {
     const picturesArray = response.data.hits;
